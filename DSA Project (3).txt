@@ -1,0 +1,1123 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<iomanip>
+#include<vector>
+
+using namespace std;
+void exponentialSearch(int id);
+int partition(vector<int>& arr, int low, int high);
+void quicksort(vector<int>& arr, int low, int high);
+
+bool log = false;
+
+class user_login
+{
+	public:
+    string name, password, confirmPassword, email;
+
+
+void login()
+{
+    bool isLoggedIn = false;
+
+    do {
+        system("cls");
+        cout << "\t\t\t\t______________________________________\n" << endl;
+        cout << "\t\t\t\t       Login FXJ Barkery SHOP     \n" << endl;
+        cout << "\t\t\t\t______________________________________\n" << endl;
+        cout << "\n\n\t\t\t Please Login \n";
+        cout << "\n\t\t\t Enter name :";
+        cin >> name;
+        cout << "\n\t\t\t Password :";
+        cin >> password;
+
+        ifstream file("user.txt");
+        if (file.is_open())
+        {
+            string storedName, storedEmail, storedPassword;
+            while (file >> storedName >> storedEmail >> storedPassword)
+            {
+                if (name == storedName && password == storedPassword)
+                {
+                    isLoggedIn = true;
+                    break;
+                }
+            }
+            file.close();
+            if (isLoggedIn)
+            {
+                system("cls");
+                log = true;
+                // Perform actions after successful login
+                // No need for break here
+            }
+            else
+            {
+                char choice;
+                cout << "\n\t\t\t Invalid name or password!\n";
+                cout << "\t\t\tDo you want to try again? [Y/N]: ";
+                cin >> choice;
+
+                if (choice == 'n' || choice == 'N') {
+                    // Return to the menu if the user chooses not to try again
+                    return;
+                }
+
+                system("cls");
+            }
+        }
+        else
+        {
+            cout << "Unable to open user.txt" << endl;
+            return;
+        }
+    } while (!isLoggedIn);
+}
+
+
+void registration()
+{
+    a:
+    system("cls");
+    cout << "\t\t\t\t______________________________________\n" << endl;
+    cout << "\t\t\t\t    Registration FXJ Barkery SHOP     \n" << endl;
+    cout << "\t\t\t\t______________________________________\n" << endl;
+    cout << "\n\t\t\tEnter User Name : ";
+    cin >> name;
+    cout << "\n\t\t\tEnter Email : ";
+    cin >> email;
+    cout << "\n\t\t\tEnter password : ";
+    cin >> password;
+    cout << "\n\t\t\tConfirm password : ";
+    cin >> confirmPassword;
+
+    ifstream existingUsers("user.txt");
+    string storedName, storedEmail, storedPassword;
+    bool emailExists = false;
+
+    while (existingUsers >> storedName >> storedEmail >> storedPassword)
+    {
+        if (email == storedEmail)
+        {
+            emailExists = true;
+            break;
+        }
+    }
+
+    existingUsers.close();
+
+    if (emailExists)
+    {
+        cout << "\n\t\t\tEmail already exists! Please try again." << endl;
+        cout << "\n\t\t\tPress enter to continue..." << endl;
+        cin.ignore();
+        cin.get();
+        goto a;
+    }
+    else if (password == confirmPassword)
+    {
+        ofstream file("user.txt", ios::app); // Provide the filename "user.txt"
+        if (file.is_open())
+        {
+            file << name << " " << email << " " << password << endl;
+            file.close();
+            cout << "\n\n\t\t\tRegistration Successful!!!" << endl;
+            cout << "\t\t\tPress enter to continue..." << endl;
+            cin.ignore();
+            cin.get();
+        }
+        else
+        {
+            cout << "\nFailed to open user.txt file." << endl;
+        }
+    }
+    else
+    {
+        cout << "\n\n\t\t\tPassword does not match. Please try again!" << endl;
+        cout << "\t\t\tPress enter to try again..." << endl;
+        cin.ignore();
+        cin.get();
+        goto a;
+    }
+}
+
+};
+class furniture : public user_login
+	{	protected:
+
+			int id;
+			float price;
+			float dis;
+			string name;
+
+		public:
+			void menu();//26
+			void administrator();//86
+			void user();//131
+			void add();//164
+			void edit();//204
+			void del();//265
+			void list();//308
+			void receipt();//324
+	};
+
+void furniture ::menu()
+{
+	 ifstream file;
+	m:
+	int choice;
+	string admin;
+	string password;
+	cout<<endl;
+	cout<<"\t\t\t\t__________________________\n"<<endl;
+	cout<<"\t\t\t\t    FXJ BAKERY SHOP     \n";
+	cout<<"\t\t\t\t__________________________\n"<<endl;
+	cout<<endl;
+ 	cout<<"\t\t\t\t1) Adminstrator  \n";
+	cout<<"\t\t\t\t                 \n";
+	cout<<"\t\t\t\t2) User          \n";
+	cout<<"\t\t\t\t                 \n";
+	cout<<"\t\t\t\t3) Exit          \n";
+	cout<<"\t\t\t\t                 \n";
+	cout<<"\t\t\t\tPlease select :";
+	cin>>choice;
+	 switch(choice)
+	 {
+	 case 1:
+            system("cls");
+            cout << "\t\t\t\t__________________________\n" << endl;
+            cout << "\t\t\t\t   ADMIN FXJ BAKERY SHOP      \n" << endl;
+            cout << "\t\t\t\t__________________________\n";
+            cout << "\n\n\t\t\t Please Login \n";
+            cout << "\n\t\t\t Enter name : ";
+            cin >> admin;
+            cout << "\n\t\t\t Password : ";
+            cin >> password;
+
+            file.open("admin.txt");
+            if (file.is_open())
+            {
+                string storedName, storedPassword;
+                bool isLoggedIn = false;
+                while (file >> storedName >> storedPassword)
+                {
+                    if (admin == storedName && password == storedPassword)
+                    {
+                        isLoggedIn = true;
+                        break;
+                    }
+                }
+                file.close();
+                if (isLoggedIn)
+                {
+                	system("cls");
+                    administrator();
+                }
+                else
+                {
+                    system("cls");
+                    cout << "\n\t\t\tInvalid name or password!";
+                    break;
+                }
+            }
+            else
+            {
+                cout << "\t\t\tUnable to open admin.txt" << endl;
+            }
+
+        break;
+
+	   case 2:
+	   	{
+	   		lor:
+	   		 int userChoice;
+            while (true) {
+                system("cls");
+                cout << "\t\t\t\t__________________________\n" << endl;
+                cout << "\t\t\t\t    FXJ BAKERY SHOP       \n" << endl;
+                cout << "\t\t\t\t__________________________\n";
+                cout << "\n\t\t\t 1. Login " << endl;
+                cout << "\n\t\t\t 2. Register" << endl;
+                cout << "\n\t\t\t 3. Back To Main Page" << endl;
+                cout << "\n\t\t\t Select your choice: ";
+                cin >> userChoice;
+
+                if (userChoice == 1)
+                {
+                    login();
+                    if(log)//boolean
+                    {
+
+                    user();
+                    break;
+                    }
+                    system("cls");
+                    goto lor;
+                    break;  // Exit the loop if login is selected
+                }
+                else if (userChoice == 2)
+                {
+                    registration();
+                    goto lor;
+                    break;  // Exit the loop if register is selected
+                }
+                  else if (userChoice == 3)
+                {
+                	system("cls");
+                    goto m;
+                    break;  // Exit the loop if register is selected
+                }
+                else
+                {
+                    cout << "\n\t\t\t Invalid choice. Please try again." << endl;
+                    cout << "\t\t\tPress Enter to Continue...";
+                    cin.ignore();
+                    cin.get();
+
+                }
+            }
+
+        break;
+        }
+
+		case 3:
+		{
+			cout<<"\t\t\tSystem Down......";
+			exit(0);
+		}
+		default :
+		{
+			system("cls");
+		 	cout<<"Please select from the given options";
+		}
+}
+goto m;
+}
+//function admin
+//add, edit, delete, back main menu
+void furniture::administrator()
+ {
+    string name, password, confirmPassword;
+    ofstream file;
+
+    m:
+    system("cls");
+    int choice;
+    cout << endl;
+    cout << "\t\t\t\t__________________________\n" << endl;
+    cout << "\t\t\t\t       Administrator " << endl;
+    cout << "\t\t\t\t__________________________\n" << endl;
+    cout << "\n\t\t\t1) Add the product"<< endl;
+    cout << "\n\t\t\t2) Edit the product"<< endl;
+    cout << "\n\t\t\t3) Delete the product"<< endl;
+    cout << "\n\n\t\t\t4) Product List Checking" << endl;
+    cout << "\n\t\t\t5) Register New Admin" << endl;
+    cout << "\n\t\t\t6) Log out" << endl;
+    cout << "\n\n\t Please enter your choice : ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1:
+            system("cls");
+            list();
+            add();
+            break;
+
+        case 2:
+            system("cls");
+            list();
+            edit();
+            break;
+
+        case 3:
+            system("cls");
+            list();
+            del();
+            break;
+
+        case 4:
+            system("cls");
+            int chc;
+            list();
+            cout<<"__________________________________________________________________\n";
+            cout << "\n\n\n 1.Check Product by ID " << endl;
+            cout << " 2.Back" << endl;
+            cout << "\n\nPlease Enter Your Choice : ";
+            cin >> chc;
+            switch (chc) {
+                case 1: {
+                    int ID;
+                    cout << "\nEnter product searching ID : ";
+                    cin >> ID;
+                    exponentialSearch(ID);
+                    system("pause");
+                    break;
+                }
+
+                case 2:
+                    std::cout << "Exiting...\n";
+                    break;
+            }
+            break;
+
+        case 5: {
+            a:
+            system("cls");
+            cout << "\t\t\t\t_________________________\n" << endl;
+            cout << "\t\t\t\t     Administrator " << endl;
+            cout << "\t\t\t\t_________________________\n" << endl;
+            cout << "\t\t\tEnter User Name : ";
+            cin >> name;
+            cout << "\n\t\t\tEnter password : ";
+            cin >> password;
+            cout << "\n\t\t\tConfirm password : ";
+            cin >> confirmPassword;
+
+            ifstream existingUsers("admin.txt");
+            string storedName;
+            bool nameExists = false;
+
+            while (existingUsers >> storedName) {
+                if (name == storedName) {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            existingUsers.close();
+
+            if (nameExists) {
+                cout << "\t\t\tUsername already exists! Please try again." << endl;
+                cout << "\t\t\tPress enter to continue..." << endl;
+                cin.ignore();
+                cin.get();
+                goto a;
+            }
+            else if (password == confirmPassword) {
+                file.open("admin.txt", ios::app);
+                if (file.is_open()) {
+                    file << name << " " << password << endl;
+                    file.close();
+                    cout << "\n\t\t\tRegister Successful !!!" << endl;
+                    cout << "\t\t\tPress enter to continue..." << endl;
+                    cin.ignore();
+                    cin.get();
+                }
+                else {
+                    cout << "\t\t\tFile cannot open " << endl;
+                }
+            }
+            else {
+                cout << "\n\t\t\tPassword Not Match!" << endl;
+                cout << "\t\t\tPress enter to try it again..." << endl;
+                cin.ignore();
+                cin.get();
+                goto a;
+            }
+            break;
+        }
+
+        case 6:
+            system("cls");
+            menu();
+            break;
+
+        default:
+            system("cls");
+            cout << "Invalid choice!";
+    }
+
+    goto m;
+}
+
+
+//customer
+//buy product, back main menu
+void furniture :: user()
+{
+
+	system("cls");
+	m:
+	int choice;
+	cout<<endl;
+	cout<<"\t\t\t __________________________\n"<<endl;
+	cout<<"\t\t\t          Main Page \n";
+	cout<<"\t\t\t __________________________\n";
+	cout<<"                 \n";
+	cout<<"\t\t\t1) Buy Product \n"<<endl;
+	cout<<"\t\t\t2) Product List"<<endl;
+	cout<<"\n\t\t\t3) Log out  \n";
+
+	cout<<"\n\t\t\t Enter your choice : ";
+	cin>>choice;
+
+	switch(choice)
+	{
+		case 1:
+			system("cls");
+			receipt();
+			break;
+
+	    case 2:
+	    	system("cls");
+			list();
+            cout<<"\n__________________________________________________________________\n";
+		    cout << "\nPress enter to continue..." << endl;
+			cin.ignore();
+            cin.get();
+            system("cls");
+			break;
+		case 3:
+			system("cls");
+			menu();
+
+		default:
+			system("cls");
+			cout<<"Invalid choice!";
+	}
+	goto m;
+}
+//admin
+//id, name, price, discount, add product-
+void furniture::add()
+{
+    fstream data;
+    int id;
+    string name;
+    float price;
+    float dis;
+    char z;
+    cout << "__________________________________________________________________\n\n";
+    do {
+        cout << "\n\n\t\t\t Add new product";
+        cout << "\n\n\t Product code of the product :";
+        cin >> id;
+
+        // Check if the ID already exists in the file
+        bool idExists = false;
+        data.open("database.txt", ios::in);
+        if (data.is_open()) {
+            string line;
+            while (getline(data, line)) {
+                stringstream ss(line);
+                int currentId;
+                ss >> currentId;
+                if (currentId == id) {
+                    idExists = true;
+                    break;
+                }
+            }
+            data.close();
+        }
+        else {
+            cout << "File cannot be opened!" << endl;
+        }
+
+        if (idExists) {
+            cout << "\n\n\t\tProduct with the same ID already exists. Please enter a different ID.\n";
+            continue; // Restart the loop to allow the user to enter a different ID
+        }
+
+        cout << "\n\n\t Name of the product : ";
+        fflush(stdin);
+        getline(cin, name);
+        cout << "\n\n\tPrice of the product : RM";
+        cin >> price;
+        cout << "\n\n\t Discount on product (%) : ";
+        cin >> dis;
+
+        cin.ignore(); // Ignore the newline character after reading dis
+
+        data.open("database.txt", ios::in | ios::out | ios::app);
+
+        if (data.is_open()) {
+            data.seekg(0, ios::beg);
+
+            // Create a temporary file to hold the updated data
+            ofstream temp("temp.txt");
+
+            // Read all the existing products from the file
+            vector<pair<int, string>> products;
+            while (!data.eof()) {
+                int currentId;
+                string line;
+                getline(data, line);
+                if (!line.empty()) {
+                    stringstream ss(line);
+                    ss >> currentId;
+                    products.emplace_back(currentId, line);
+                }
+            }
+
+            // Insert the new product into the sorted vector of products
+            bool inserted = false;
+            for (const auto& product : products) {
+                if (product.first > id && !inserted) {
+                    temp << " "<< id << " " << name << " " << price << " " << dis << endl;
+                    inserted = true;
+                }
+                temp << product.second << endl;
+            }
+
+            // If the new product has the highest ID or the file is empty, append it at the end of the file
+            if (!inserted) {
+                temp << " "<< id << " " << name << " " << price << " " << dis << endl;
+            }
+
+            temp.close();
+            data.close();
+
+            // Replace the original file with the updated data from the temporary file
+            remove("database.txt");
+            rename("temp.txt", "database.txt");
+        }
+        else {
+            cout << "File cannot be opened!" << endl;
+        }
+
+        cout << "\n\n\t\t Continue add product?[Y/N] : ";
+        cin >> z;
+
+        cin.ignore(); // Ignore the newline character after reading z
+
+    } while (z == 'y' || z == 'Y');
+
+    cout << "\n\n\t\t Record Inserted!" << endl;
+    cout << "\n\t\tPress Enter to Continue..." << endl;
+    cin.ignore();
+    system("cls");
+}
+
+
+
+//admin
+//original id, new id, price, discount, delete product
+void furniture::edit() {
+    fstream data, data1;
+    int pkey;
+    int dp = 0;
+    int c; // new id
+    float p;
+    float d;
+    string n;
+    bool recordFound = false;
+
+    cout << "__________________________________________________________________\n\n";
+    cout << "\n\t\t\t Modify the record";
+    cout << "\n\t\t\t Product id :";
+    cin >> pkey;
+
+    data.open("database.txt", ios::in);
+    if (!data) {
+        cout << "\n\nFile doesn't exist! ";
+    } else {
+        data1.open("database1.txt", ios::out);
+
+        int id;
+        string name;
+        float price;
+        float dis;
+
+        data >> id >> name >> price >> dis;
+        while (!data.eof()) {
+            if (pkey == id) {
+                recordFound = true;
+                cout << "\n\t\t Product New Id :";
+                cin >> c;
+
+                bool idExists = false;
+                fstream dataCheck("database.txt", ios::in);
+                while (!dataCheck.eof()) {
+                    dataCheck >> id >> name >> price >> dis;
+                    if (c == id) {
+                        idExists = true;
+                        break;
+                    }
+                }
+                dataCheck.close();
+
+                while (idExists) {
+                    cout << "\n\t\t Error: ID already exists! Please enter a different NEW ID :";
+                    cin >> c;
+                    idExists = false;
+
+                    fstream dataCheck("database.txt", ios::in);
+                    while (!dataCheck.eof()) {
+                        dataCheck >> id >> name >> price >> dis;
+                        if (c == id) {
+                            idExists = true;
+                            break;
+                        }
+                    }
+                    dataCheck.close();
+                }
+
+                cout << "\n\t\t Name Of the Product :";
+                cin >> n;
+                cout << "\n\t\t New Product Price : RM ";
+                cin >> p;
+                cout << "\n\t\t New Product Discount (%) : ";
+                cin >> d;
+                data1 << " " << c << " " << n << " " << p << " " << d << "\n";
+                cout << "\n\n\t\t Record Edited Successfully! ";
+                cout << "\n\t\t\tPress enter to continue..." << endl;
+                cin.ignore();
+                cin.get();
+                system("cls");
+                dp++;
+            } else {
+                data1 << " " << id << " " << name << " " << price << " " << dis << "\n";
+            }
+
+            data >> id >> name >> price >> dis;
+        }
+        data.close();
+        data1.close();
+
+        remove("database.txt");
+        rename("database1.txt", "database.txt");
+
+        if (dp == 0 && !recordFound) {
+            system("cls");
+            cout << "\n\nSorry, Record Not Found! Please enter the correct product ID.";
+            list();
+            edit(); // Prompt user to enter the correct ID recursively
+        }
+    }
+
+    // Sort the IDs after editing
+    data.open("database.txt", ios::in);
+    if (data) {
+        data1.open("database1.txt", ios::out);
+
+        vector<int> ids;
+        int currentId;
+
+        data >> currentId >> name >> price >> dis;
+        while (!data.eof()) {
+            ids.push_back(currentId);
+            data1 << currentId << " " << name << " " << price << " " << dis << "\n";
+            data >> currentId >> name >> price >> dis;
+        }
+
+        data.close();
+        data1.close();
+
+        // Sort the IDs using quicksort
+        quicksort(ids, 0, ids.size() - 1);
+
+        // Rewrite the file with the sorted IDs
+        data.open("database.txt", ios::out | ios::trunc);
+        data1.open("database1.txt", ios::in);
+
+        for (int i = 0; i < ids.size(); i++) {
+            int id;
+            string line;
+
+            // Find the line associated with the current ID
+            while (getline(data1, line)) {
+                stringstream ss(line);
+                ss >> id;
+                if (id == ids[i]) {
+                    data << line << endl;
+                    break;
+                }
+            }
+
+            data1.seekg(0, ios::beg);
+        }
+
+        data.close();
+        data1.close();
+
+        remove("database1.txt");
+        cout << "\n\n\t\t IDs sorted successfully!";
+    } else {
+        cout << "File does not exist!" << endl;
+    }
+}
+
+
+
+//admin
+//file.txt, id for delete,
+void furniture::del()
+{
+    fstream data, data1;
+    int numToDelete;
+    int dp = 0;
+
+    cout << "__________________________________________________________________\n\n";
+    cout << "\n\n\t Delete product";
+    cout << "\n\n\t Enter the number of products you want to delete: ";
+    cin >> numToDelete;
+    do
+    {
+    cout << "\n\n\t Number of products want to delete cannot less than '1' !!";
+    cout << "\n\t Enter the number of products you want to delete: ";
+    cin >> numToDelete;
+    }while(numToDelete<=0);
+
+    int* pkeys = new int[numToDelete];
+
+    cout << "\n\n\t Enter the product IDs to delete:\n";
+    for (int i = 0; i < numToDelete; i++)
+    {
+        cout << "\n\t Product ID " << i + 1 << ": ";
+        cin >> pkeys[i];
+    }
+
+    data.open("database.txt", ios::in);
+    if (!data)
+    {
+        cout << "File doesn't exist";
+    }
+    else
+    {
+        data1.open("database1.txt", ios::app | ios::out);
+        data >> id >> name >> price >> dis;
+        while (!data.eof())
+        {
+            bool found = false;
+            for (int i = 0; i < numToDelete; i++)
+            {
+                if (id == pkeys[i])
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                data1 << " " << id << " " << name << " " << price << " " << dis << "\n";
+            }
+            else
+            {
+
+                cout << "\n\n\t Product ID " << id << " deleted successfully";
+                dp++;
+            }
+
+            data >> id >> name >> price >> dis;
+        }
+
+        data.close();
+        data1.close();
+        remove("database.txt");
+        rename("database1.txt", "database.txt");
+
+        if (dp == 0)
+        {
+
+            cout << "\n\n\t Sorry, no matching records found!";
+
+        }
+    }
+
+    delete[] pkeys;
+    cin.ignore();
+    cin.get();
+    system("cls");
+
+}
+
+
+//
+void furniture :: list()
+{
+	fstream data;
+	data.open("database.txt",ios::in);
+	cout<<"\n__________________________________________________________________\n";
+	cout<<"\nID   \t\tName\t\t\t\t\tPrice";
+	cout<<"\n__________________________________________________________________\n";
+	data>>id>>name>>price>>dis;
+	while(!data.eof())
+		{
+			cout<<id<<". \t\t"<<left<<setw(30)<<name<<"\t\t"<<fixed<<setprecision(2)<<price<<"\n";
+			data>>id>>name>>price>>dis;
+		}
+	data.close();
+}
+
+
+
+void furniture::receipt()
+{
+    fstream data;
+
+    int arrc[100];
+    int arrq[100];
+    char choice;
+    int c = 0;
+    float amount = 0;
+    float dis = 0;
+    float total = 0;
+
+
+    data.open("database.txt", ios::in);
+    if (!data)
+    {
+        cout << "\n\n Empty database";
+    }
+    else
+    {
+        data.close();
+
+        list();
+        cout << "\n__________________________________________________________________\n";
+        cout << "\n                      Please place the order   ";
+        cout << "\n__________________________________________________________________\n";
+        do
+        {
+            m:
+            cout << "\n\nEnter Product code : ";
+            cin >> arrc[c];
+
+            // Check if the entered ID already exists in the array
+            for (int i = 0; i < c; i++)
+            {
+                if (arrc[c] == arrc[i])
+                {
+                    cout << "\n\n Duplicate Product ID. Please try again!";
+                    goto m;
+                }
+            }
+
+            // Check if the entered ID exists in the database
+            bool found = false;
+            data.open("database.txt", ios::in);
+            while (data >> id >> name >> price >> dis)
+            {
+                if (id == arrc[c])
+                {
+                    found = true;
+                    break;
+                }
+            }
+            data.close();
+
+            if (!found)
+            {
+                cout << "\n\n Product ID does not exist. Please try again!";
+                goto m;
+            }
+
+            cout << "\n\nEnter the product quantity : ";
+            cin >> arrq[c];
+            do {
+                 cout << "\n\nContinue to add more order ? [Y/N]  ";
+                 cin >> choice;
+                 c++;
+               } while (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N');
+
+        } while (choice == 'y' || choice == 'Y');
+
+        system("cls");
+        cout << "\n\n___________________________________________________________________________________________________________________________\n";
+        cout << "                                                  FXJ Barkery SHOP RECEIPT\n";
+        cout << "___________________________________________________________________________________________________________________________\n";
+        cout << "\n" << left << setw(15) << "Product No" << setw(25) << "Product Name" << setw(24) << "Product quantity" << setw(15) << "Price(RM)" << setw(15) << "Amount(RM)" << setw(15) << "Amount with discount(RM)\n";
+        cout << "____________________________________________________________________________________________________________________________\n";
+
+        // Open the history file outside the loop
+        ofstream history_file("history.txt", ios::app);
+        if (history_file.is_open())
+        {
+            history_file<< "\n\n\n\n___________________________________________________________________________________________________________________________\n";
+            history_file<<"                                                  FXJ Barkery SHOP RECEIPT\n";
+            history_file<<"___________________________________________________________________________________________________________________________\n";
+            history_file<< "\n" << left << setw(25) << "Product No" << setw(38) << "Product Name" << setw(35) << "Product quantity" << setw(23) << "Price(RM)" << setw(15) << "Amount(RM)" << setw(15) << "Amount with discount(RM)\n";
+            history_file<< "____________________________________________________________________________________________________________________________\n";
+            for (int i = 0; i < c; i++)
+            {
+                data.open("database.txt", ios::in);
+                data >> id >> name >> price >> dis;
+                while (!data.eof())
+                {
+                    if (id == arrc[i])
+                    {
+                        amount = price * arrq[i];
+                        dis = amount - (amount * dis / 100);
+                        total += dis;
+
+                        // Display the product details in the same line using setw()
+                        cout <<"\n"<< left << setw(15) << id << setw(30) << name << setw(20) << arrq[i] << setw(15) << price << setw(15) << amount << setw(15) << dis<<endl;
+
+                        // Write the product details to the history file
+                        history_file <<"\n"<< left << setw(30) << id << setw(52) << name << setw(50) << arrq[i] << setw(28) << price << setw(27) << amount << setw(15) << dis<<endl;
+                    }
+                       data >> id >> name >> price >> dis;
+
+                    }
+                       data.close();
+
+                    }
+            history_file<< "\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+            history_file<< "Total Amount: "<< right << setw(170) <<"RM "<< total;
+            history_file<< "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+            history_file.close();
+            cout << "\n\n-------------------------------------------------------------------------------------------------------------------------" << endl;
+            cout << "Total Amount: "<< right << setw(84)<<"RM "  << total;
+            cout << "\n-------------------------------------------------------------------------------------------------------------------------" << endl;
+            cout << endl << "\nHistory has been saved to history.txt\n";
+
+        }
+        else
+        {
+            cout << "Unable to open history.txt file!" << endl;
+        }
+        }
+        cin.ignore();
+        cin.get();
+        system("cls");
+        }
+
+
+void exponentialSearch(int id) {
+    ifstream file("database.txt");
+    if (!file.is_open()) {
+        cout << "Unable to open file." << endl;
+        return;
+    }
+
+    int currentID;
+    double price;
+    string name, description;
+    bool found = false;
+
+    // Binary search
+    int low = 0;
+    int high = 0;
+    bool rangeFound = false;
+
+    while (file >> currentID >> name >> price >> description) {
+        if (currentID == id) {
+            found = true;
+            break;
+        }
+        else if (currentID > id) {
+            high = file.tellg();
+            rangeFound = true;
+            break;
+        }
+
+        low = file.tellg();
+    }
+
+    if (!rangeFound) {
+        // Move file pointer to the end to read the last record
+        file.seekg(0, ios::end);
+        high = file.tellg();
+    }
+
+    // Perform binary search within the identified range
+    while (low < high) {
+        int mid = (low + high) / 2;
+        file.seekg(mid, ios::beg);
+        file >> currentID >> name >> price >> description;
+
+        if (currentID == id) {
+            found = true;
+            break;
+        }
+        else if (currentID < id) {
+            low = mid + 1;
+        }
+        else {
+            high = mid;
+        }
+    }
+
+    if (found) {
+        int priceInteger = static_cast<int>(price); // Extract the integer part of the price
+
+
+        cout << "\n\nProduct ID          : " << id << endl;
+        cout << "Product Name        : " << name << endl;
+        cout << "Product Price       : RM " << priceInteger << endl;
+        cout << "Product Description : " << description <<"%"<< endl;
+    }
+    else {
+        cout << "Product not found!" << endl;
+    }
+
+    file.close();
+
+    // Prompt for continuation
+    char choice;
+    do {
+        cout << "\nContinue Select Product? [Y/N] :";
+        cin >> choice;
+        if (choice == 'n' || choice == 'N') {
+            // Go back to the administration page
+            furniture f;
+            f.administrator();
+        }
+        else if (choice == 'y' || choice == 'Y') {
+            // Continue searching
+            int newId;
+            cout << "\nEnter product searching ID: ";
+            cin >> newId;
+            exponentialSearch(newId);
+        }
+    } while (choice != 'n' && choice != 'N' && choice != 'y' && choice != 'Y');
+}
+
+
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quicksort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pivot = partition(arr, low, high);
+        quicksort(arr, low, pivot - 1);
+        quicksort(arr, pivot + 1, high);
+    }
+}
+
+
+class standby_screen
+{
+
+public:
+	~standby_screen()
+	{
+	cout<<"\n\n\n\n\n\n\n\t\t\t\t\t______________________________________\n"<<endl;
+	cout<<"\t\t\t\t\t          FXJ Barkery SHOP     \n";
+	cout<<"\t\t\t\t\t______________________________________\n"<<endl;
+
+	}
+
+};
+
+int main()
+{
+    int i=0;
+
+	if (i<1)
+		{
+	standby_screen *ss;
+	ss = new standby_screen();
+	delete ss;
+	i++;
+	}
+	getchar();
+	system("cls");
+	furniture F;
+	F.menu();
+	return 0;
+}
